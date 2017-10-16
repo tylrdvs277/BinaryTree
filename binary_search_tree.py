@@ -20,7 +20,7 @@ class BinarySearchTree:
                 p = p.right
         return p != None
 
-def insert(self, newkey, data = None):
+    def insert(self, newkey, data = None):
         if self.root is None:			 # if tree is empty
             self.root = TreeNode(newkey, data)
         else:
@@ -30,7 +30,7 @@ def insert(self, newkey, data = None):
                     p.left = TreeNode(newkey, data, parent=p)
                 else:
                     p.left.insert(newkey, data)   # call insert of TreeNode on left child
-            elif p.key < newkey
+            elif p.key < newkey:
                 if not p.right:     # no right child from root
                     p.right = TreeNode(newkey, data, parent=p)
                 else:
@@ -99,7 +99,7 @@ class TreeNode:
         self.right = right
         self.parent = parent
 
-    def insert(self, key, data = None):
+    def insert(self, newkey, data = None):
         """  Insert new node with key, assumes key not present """
         p = self
         done = False
