@@ -125,7 +125,7 @@ class TreeNode:
 
     def find_successor(self):
         current = self.right
-        while not current.left:
+        while current.left:
             current = current.left
         return current
 
@@ -157,7 +157,7 @@ class TreeNode:
         if self.right:
             self.right.print_levels()
 
-    def get_level(self, level = 0):
+    def get_level(self):
         current = self
         level = 0
         while current.parent:
@@ -197,3 +197,4 @@ print("Testing find 14")
 print(t.find(14))
 print("Testing find 15")
 print(t.find(15))
+t.root.print_levels()
