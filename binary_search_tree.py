@@ -4,15 +4,20 @@
 # Assignment:  Lab 5
 # Term:        Fall 2017
 
-# final version for class notes
 
 class BinarySearchTree:
 
     def __init__(self):
+        """Creates a new BinarySearchTree with a root as None."""
+        """Takes no arguments.
+        Returns an empty tree."""
         self.root = None
 
-    def find (self, key):   # iterative find method
-        p = self.root      # current node
+    def find(self, key):
+        """Searches for a certain key in a tree."""
+        """Takes an integer representing a key in the tree.
+        Returns True if the key is in tree and False otherwise."""
+        p = self.root
         while p and p.key != key :
             if key < p.key:
                 p = p.left
@@ -21,17 +26,20 @@ class BinarySearchTree:
         return p != None
 
     def insert(self, newkey, data = None):
-        if self.root is None:			 # if tree is empty
+        """Adds a new key to the tree."""
+        """Takes an integer representing a new key to be placed and optional data.
+        Returns None and modifies the tree."""
+        if self.root is None:			 
             self.root = TreeNode(newkey, data)
         else:
             p = self.root
             if p.key > newkey:
-                if not p.left:      # no left child from root
+                if not p.left:      
                     p.left = TreeNode(newkey, data, parent=p)
                 else:
-                    p.left.insert(newkey, data)   # call insert of TreeNode on left child
+                    p.left.insert(newkey, data)   
             elif p.key < newkey:
-                if not p.right:     # no right child from root
+                if not p.right:     
                     p.right = TreeNode(newkey, data, parent=p)
                 else:
                     p.right.insert(newkey, data)
@@ -39,6 +47,9 @@ class BinarySearchTree:
                 p.data = data
 
     def delete(self, key):
+        """Deletes a key from the tree."""
+        """Takes an integer representing a key in the tree.
+        Returns None and takes and modifies the tree."""
         current = self.get_node(key)
         if not current.right and not current.left:
             if current.parent.right == current:
@@ -71,7 +82,10 @@ class BinarySearchTree:
                     current.left.parent = current.parent  
          
     def get_node(self, key):
-        p = self.root      # current node
+        """Finds a node with a given key."""
+        """Takes an integer representing a key in the tree.
+        Returns a node in the tree that contains the given key."""
+        p = self.root      
         while p and p.key != key :
             if key < p.key:
                 p = p.left
@@ -80,19 +94,27 @@ class BinarySearchTree:
         return p
 
     def print_tree(self):
+        """Prints the tree out in order."""
+        """Takes no arguments.
+        Returns None and outputs the tree."""
         if self.root == None:
             print()
         else:
             self.root.inorder_print_tree()
 
     def is_empty(self):
+        """Determines if the tree is empty."""
+        """Takes no arguments.
+        Returns True if the tree is empty and False otherwise."""
         return self.root == None
 
 
 class TreeNode:
-    """Tree node: left and right child + data which can be any object"""
 
-    def __init__(self,key,data=None,left=None,right=None,parent=None):
+    def __init__(self, key, data = None, left = None, right = None, parent = None):
+        """Creates a new TreeNode with a key."""
+        """Takes a key and other, optional arguments.
+        Returns a new TreeNode class."""
         self.key = key
         self.data = data
         self.left = left
@@ -100,7 +122,9 @@ class TreeNode:
         self.parent = parent
 
     def insert(self, newkey, data = None):
-        """  Insert new node with key, assumes key not present """
+        """Insert new node with key."""
+        """Takes a new key and an optional data.
+        Returns None and modifies the nodes in the tree."""
         p = self
         done = False
         while not done:
@@ -124,25 +148,36 @@ class TreeNode:
             p.data = data
 
     def find_successor(self):
+        """Finds the next node in order."""
+        """Takes no arguments.
+        Returns the node witht he next key."""
         current = self.right
         while current.left:
             current = current.left
         return current
 
     def find_min(self):
+        """Finds the smallest key value beginning at a node."""
+        """Takes no arguments.
+        Returns the smallest key from a node."""
         current = self
         while current.left:
             current = current.left
         return current.key
 
     def find_max(self):
+        """Finds the largest key value beginning at a node."""
+        """Takes no arguments.
+        Returns the largest key from a node."""
         current = self
         while current.right:
             current = current.right
         return current.key
 
     def inorder_print_tree(self):
-        """   Print tree content inorder        """
+        """Prints all the nodes in a tree in order."""
+        """Takes no arguments.
+        Returns None and outputs all the nodes in the tree."""
         if self.left:
             self.left.inorder_print_tree()
         self.print_node()
@@ -150,6 +185,9 @@ class TreeNode:
             self.right.inorder_print_tree()
 
     def print_levels(self):
+        """Prints all the keys in a tree and the level of the key."""
+        """Takes no arguments.
+        Returns None and outputs the keys and the level of the key."""
         if self.left:
             self.left.print_levels()
         level = self.get_level()
@@ -158,6 +196,9 @@ class TreeNode:
             self.right.print_levels()
 
     def get_level(self):
+        """Finds the level of a given node."""
+        """Takes no arguments.
+        Returns an integer representing the level of the key."""
         current = self
         level = 0
         while current.parent:
@@ -166,6 +207,9 @@ class TreeNode:
         return level
 
     def update(self, other):
+        """Updates a node with another node's information."""
+        """Takes another node as an argument.
+        Returns None and updates the node with the data from another node."""
         self.key = other.key
         self.data = other.data
         self.left = other.left
@@ -173,28 +217,10 @@ class TreeNode:
         self.parent = other.parent
 
     def print_node(self):
-        """   Print Node information """
+        """Prints a node."""
+        """Takes no arguments.
+        Returns None and outputs all the data of the node."""
         if self.parent:
             print("key =", self.key, ", data =", self.data, ", parent key: ", self.parent.key)
         else:
             print("key =", self.key, ", data =", self.data, ", root")
-
-t = BinarySearchTree()
-t.insert(8, 'hello')
-t.insert(3, 'dog')
-t.insert(10)
-t.insert(1)
-print ("Tree after inserting 8, 3, 10, 1")
-t.root.inorder_print_tree()
-t.insert(6)
-t.insert(4)
-t.insert(7)
-t.insert(14)
-t.insert(13)
-print ("Tree after inserting 6, 4, 7, 14, 13")
-t.print_tree()
-print("Testing find 14")
-print(t.find(14))
-print("Testing find 15")
-print(t.find(15))
-t.root.print_levels()
