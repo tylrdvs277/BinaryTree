@@ -150,11 +150,20 @@ class TreeNode:
     def find_successor(self):
         """Finds the next node in order."""
         """Takes no arguments.
-        Returns the node witht he next key."""
-        current = self.right
-        while current.left:
-            current = current.left
-        return current
+        Returns the node with the next key."""
+        current = self
+        if current.right:
+            current = current.right
+            while current.left:
+                current = current.left
+            return current
+        else:
+            if not current.parent:
+                return None
+            elif current.parent.left == current:
+                return current.parent
+            else:
+                return None
 
     def find_min(self):
         """Finds the smallest key value beginning at a node."""
