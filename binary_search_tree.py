@@ -12,6 +12,7 @@ class BinarySearchTree:
         """Takes no arguments.
         Returns an empty tree."""
         self.root = None
+        self.size = 0
 
     def find(self, key):
         """Searches for a certain key in a tree."""
@@ -29,7 +30,7 @@ class BinarySearchTree:
         """Adds a new key to the tree."""
         """Takes an integer representing a new key to be placed and optional data.
         Returns None and modifies the tree."""
-        if self.root is None:			 
+        if not self.root:			 
             self.root = TreeNode(newkey, data)
         else:
             p = self.root
@@ -45,6 +46,7 @@ class BinarySearchTree:
                     p.right.insert(newkey, data)
             else:
                 p.data = data
+        self.size += 1
 
     def delete(self, key):
         """Deletes a key from the tree."""
@@ -52,7 +54,9 @@ class BinarySearchTree:
         Returns None and takes and modifies the tree."""
         current = self.get_node(key)
         if not current.right and not current.left:
-            if current.parent.right == current:
+            if current == self.root:
+                self.root = None
+            elif current.parent.right == current:
                 current.parent.right = None
             else:
                 current.parent.left = None
@@ -101,6 +105,21 @@ class BinarySearchTree:
             print()
         else:
             self.root.inorder_print_tree()
+
+    def __iter__(self):
+        return self.root.__iter__()
+
+    def __contains__(self, item):
+        return self.find(item)
+
+    def __getitem__(self, item):
+        return self.get_node(item).data
+
+    def __setitem__(self, key, data):
+        self.insert(key, data)
+        
+    def __len__(self):
+        return self.size
 
     def is_empty(self):
         """Determines if the tree is empty."""
@@ -151,19 +170,21 @@ class TreeNode:
         """Finds the next node in order."""
         """Takes no arguments.
         Returns the node with the next key."""
-        current = self
+        succ = None
         if current.right:
-            current = current.right
+            current = self.right
             while current.left:
                 current = current.left
-            return current
+            succ = current
         else:
-            if not current.parent:
-                return None
-            elif current.parent.left == current:
-                return current.parent
-            else:
-                return None
+            if self.parent:
+                if self == self.parent.left:
+                    succ = self.parent
+                else: 
+                    self.parent.right = None
+                    succ = self.parent.find_successor()
+                    self.parent.right = self
+        return succ      
 
     def find_min(self):
         """Finds the smallest key value beginning at a node."""
@@ -214,6 +235,24 @@ class TreeNode:
             current = current.parent
             level += 1
         return level
+
+    def __iter__(self):
+        checked = []
+        current = self
+        done = False
+        while not done:
+            if current.left and current.left not in checked:
+                current = current.left
+            elif current not in checked:
+                checked.append(current)
+                yield current.key
+            elif current.right and current.right not in checked:
+                current = current.right
+            else:
+                if current.parent:
+                    current = current.parent
+                else:
+                    done = True
 
     def update(self, other):
         """Updates a node with another node's information."""
